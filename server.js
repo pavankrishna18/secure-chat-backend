@@ -9,7 +9,7 @@ const io = new Server(server, {
   cors: { origin: "*" }
 });
 
-// username → socketId (RAM only)
+// RAM-only user store
 const users = {};
 
 io.on("connection", socket => {
@@ -17,6 +17,7 @@ io.on("connection", socket => {
   socket.on("register", username => {
     users[username] = socket.id;
     socket.username = username;
+    console.log("User connected:", username);
   });
 
   socket.on("send-message", ({ to, payload }) => {
@@ -30,6 +31,7 @@ io.on("connection", socket => {
 
   socket.on("disconnect", () => {
     delete users[socket.username];
+    console.log("User disconnected:", socket.username);
   });
 });
 
